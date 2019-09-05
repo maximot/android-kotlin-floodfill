@@ -17,7 +17,7 @@ class FloodfillViewModel(
 ) : ViewModel() {
 
     companion object {
-        const val FILLING_COLOR: Int = 0xFFFF0000.toInt()
+        const val FILLING_COLOR: Int = 0xFFFF6101.toInt()
     }
 
     val height
