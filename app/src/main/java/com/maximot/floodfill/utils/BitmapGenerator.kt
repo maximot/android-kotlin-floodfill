@@ -33,7 +33,10 @@ object BitmapGenerator {
         val paint = Paint()
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.color = Color.BLACK
-        paint.strokeWidth = 1.0f
+        paint.strokeWidth = 0.9f
+        paint.strokeJoin = Paint.Join.MITER
+        paint.strokeMiter = 0.1f
+        paint.strokeCap = Paint.Cap.ROUND
         paint.isAntiAlias = false
 
         val size = random.nextInt(5, max(6, width / 8)).toFloat()
@@ -42,7 +45,7 @@ object BitmapGenerator {
         val rocketX = random.nextInt((size / 2).toInt(), max((size / 2).toInt(), width)).toFloat()
 
 
-        canvas.drawCircle(rocketX + size/4, rocketY - size/4, size * 2f, paint)
+        canvas.drawCircle(rocketX + size / 4, rocketY - size / 4, size * 2f, paint)
         paint.color = Color.WHITE
         val path = Path()
         path.moveTo(rocketX + size, rocketY - size)
@@ -53,14 +56,15 @@ object BitmapGenerator {
         path.lineTo(rocketX + size, rocketY - size)
         path.close()
         canvas.drawPath(path, paint)
+        canvas.drawLine(rocketX + size - 1, rocketY - size + 1, rocketX, rocketY + size, paint)
 
         Floodfiller.Scanline(bitmap, Point(rocketX.toInt(), rocketY.toInt()), Color.WHITE).fill()
 
         paint.color = Color.BLACK
 
         val radius = sqrt(
-            2*size*size
-        ).toFloat()/2.0f
+            2 * size * size
+        ).toFloat() / 2.0f
         canvas.drawCircle((2 * rocketX - size) / 2, (2 * rocketY + size) / 2, radius, paint)
 
     }
