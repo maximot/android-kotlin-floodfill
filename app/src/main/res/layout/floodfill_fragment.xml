@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flood_fill_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".floodfill.ui.fragment.FloodfillFragment">
+
+    <Spinner
+        android:id="@+id/floodfill_algorithm_chooser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:entries="@array/algorithms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.maximot.floodfill.floodfill.ui.view.BitmapView
+        android:id="@+id/floodfill_bitmap_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/floodfill_bitmap_width"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/floodfill_algorithm_chooser" />
+
+    <EditText
+        android:id="@+id/floodfill_bitmap_width"
+        style="@style/AppTheme.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="24dp"
+        android:ems="3"
+        android:inputType="number"
+        android:maxLength="3"
+        android:text="128"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/floodfill_speed"
+        app:layout_constraintEnd_toStartOf="@+id/floodfill_bitmap_size_divider"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/floodfill_bitmap_size_divider"
+        style="@style/AppTheme.Text.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_bitmap_width"
+        app:layout_constraintEnd_toStartOf="@+id/floodfill_bitmap_height"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/floodfill_bitmap_width" />
+
+    <EditText
+        android:id="@+id/floodfill_bitmap_height"
+        style="@style/AppTheme.Text.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="3"
+        android:inputType="number"
+        android:maxLength="3"
+        android:text="128"
+        android:textAlignment="center"
+        app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_bitmap_width"
+        app:layout_constraintEnd_toStartOf="@+id/floodfill_bitmap_generate_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/floodfill_bitmap_size_divider" />
+
+    <Button
+        android:id="@+id/floodfill_bitmap_generate_button"
+        style="@style/AppTheme.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/generate"
+        app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_bitmap_width"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/floodfill_bitmap_height" />
+
+    <SeekBar
+        android:id="@+id/floodfill_algorithm_speed_chooser"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="1000"
+        android:min="1"
+        android:progress="500"
+        app:layout_constraintBottom_toBottomOf="@+id/floodfill_fps"
+        app:layout_constraintEnd_toStartOf="@+id/floodfill_fps"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/floodfill_speed"
+        app:layout_constraintTop_toTopOf="@+id/floodfill_fps" />
+
+    <TextView
+        android:id="@+id/floodfill_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        style="@style/AppTheme.Text.Primary"
+        android:text="@string/speed"
+        app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_fps"
+        app:layout_constraintEnd_toStartOf="@+id/floodfill_algorithm_speed_chooser"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/floodfill_fps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        style="@style/AppTheme.Text.Primary"
+        tools:text="30 fps"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/floodfill_algorithm_speed_chooser" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

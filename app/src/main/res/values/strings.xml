@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">FloodFill</string>
+    <string name="app_name" translatable="false">FloodFill</string>
+    <string name="speed">Speed</string>
+    <string name="generate">Generate</string>
+
+    <string-array name="algorithms">
+        <item>4 neighbours (Queue)</item>
+        <item>4 neighbours (Stack)</item>
+        <item>Scanline</item>
+    </string-array>
 </resources>

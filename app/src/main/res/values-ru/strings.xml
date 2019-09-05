@@ -1,0 +1,10 @@
+<resources>
+    <string name="speed">Скорость</string>
+    <string name="generate">Сгенерировать</string>
+
+    <string-array name="algorithms">
+        <item>4 соседа (Очередь)</item>
+        <item>4 соседа (Стек)</item>
+        <item>Scanline</item>
+    </string-array>
+</resources>

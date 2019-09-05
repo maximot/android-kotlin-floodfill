@@ -1,19 +1,17 @@
 package com.maximot.floodfill
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.maximot.floodfill.floodfill.ui.FloodfillFragment
+import com.maximot.floodfill.floodfill.ui.fragment.FloodfillFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, FloodfillFragment.create())
+                .replace(R.id.main_fragment_container, FloodfillFragment.create())
                 .commitNow()
         }
     }
-
 }
