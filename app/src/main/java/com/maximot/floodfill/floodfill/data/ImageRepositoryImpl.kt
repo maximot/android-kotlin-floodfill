@@ -23,6 +23,9 @@ class ImageRepositoryImpl(val context: Context) : ImageRepository{
     }
 
     override fun load(): Bitmap {
-        return BitmapFactory.decodeStream(FileInputStream(imageFile)).copy(Bitmap.Config.RGB_565,true)
+        val decodeStream = BitmapFactory.decodeStream(FileInputStream(imageFile))
+        val bitmap = decodeStream.copy(Bitmap.Config.RGB_565,true)
+        decodeStream.recycle()
+        return bitmap
     }
 }
