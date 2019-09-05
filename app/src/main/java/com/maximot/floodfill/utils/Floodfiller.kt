@@ -14,6 +14,10 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
 
     abstract val isDone: Boolean
     abstract fun step()
+    fun fill(){
+        while(!isDone)
+            step()
+    }
 
     class Stack(image: Bitmap, startPoint: Point, color: Int): Floodfiller(image, startPoint, color){
 
