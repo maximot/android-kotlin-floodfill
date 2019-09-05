@@ -102,6 +102,8 @@ class FloodfillFragment : BaseFragment() {
         })
         viewModel.image.observe(this,Observer { image ->
             floodfill_bitmap_view.image = image
+            floodfill_bitmap_width.setText(image.width.toString())
+            floodfill_bitmap_height.setText(image.height.toString())
         })
         viewModel.isBusy.observe(this, Observer { busy ->
             if(busy)

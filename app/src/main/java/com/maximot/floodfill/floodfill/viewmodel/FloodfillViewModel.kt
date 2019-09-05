@@ -8,6 +8,7 @@ import com.maximot.floodfill.floodfill.data.ImageRepository
 import com.maximot.floodfill.utils.FloodFillingThread
 import com.maximot.floodfill.utils.FloodfillAlgorithm
 import java.io.IOException
+import kotlin.math.max
 
 
 class FloodfillViewModel(
@@ -29,20 +30,20 @@ class FloodfillViewModel(
     val algorithm = MutableLiveData<FloodfillAlgorithm>()
     val isBusy = MutableLiveData<Boolean>()
 
+    private var processingThreads: ArrayList<FloodFillingThread> = arrayListOf()
+
     init {
         isBusy.value = true
         try {
             image.value = imageRepository.load()
         } catch (e: IOException) {
             System.err.println(e)
-            onGenerateImage(128,128)
+            onGenerateImage(128, 128)
         }
         isBusy.value = false
         fps.value = 30
         algorithm.value = FloodfillAlgorithm.QUEUE
     }
-
-    private var processingThreads: ArrayList<FloodFillingThread> = arrayListOf()
 
     fun onBitmapClicked(x: Int, y: Int) {
         onNewPoint(x, y)
@@ -60,7 +61,7 @@ class FloodfillViewModel(
     fun onGenerateImage(width: Int, height: Int) {
         isBusy.value = true
         stopAllThreads()
-        image.value = generateImage(width, height)
+        image.value = generateImage(max(width, 32), max(height, 32))
         saveImage()
         isBusy.value = false
     }
@@ -70,7 +71,7 @@ class FloodfillViewModel(
         saveImage()
         try {
             image.value?.recycle()
-        } catch (e: Exception){
+        } catch (e: Exception) {
         }
         super.onCleared()
     }
