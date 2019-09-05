@@ -22,7 +22,7 @@ class FloodfillApplication : Application() {
             override fun onActivityCreated(p0: Activity, p1: Bundle?) {
                 if (p0 is BaseActivity) {
                     p0.dependencyProvider = dependencyProvider
-                    setupFragments(p0)
+                    handleFragments(p0)
                 }
             }
 
@@ -40,7 +40,7 @@ class FloodfillApplication : Application() {
         })
     }
 
-    private fun setupFragments(p0: BaseActivity) {
+    private fun handleFragments(p0: BaseActivity) {
         p0.supportFragmentManager.registerFragmentLifecycleCallbacks(object:
             FragmentManager.FragmentLifecycleCallbacks() {
             override fun onFragmentPreCreated(

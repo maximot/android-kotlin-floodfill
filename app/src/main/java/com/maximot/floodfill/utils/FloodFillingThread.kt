@@ -8,9 +8,9 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 class FloodFillingThread(
-    val image: Bitmap,
-    val point: Point,
-    val color: Int,
+    private val image: Bitmap,
+    private val point: Point,
+    private val color: Int,
     val floodfillAlgorithm: FloodfillAlgorithm
 ) : Thread() {
     private var flagRunning: AtomicBoolean = AtomicBoolean(false)

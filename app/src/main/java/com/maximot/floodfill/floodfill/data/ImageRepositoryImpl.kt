@@ -7,12 +7,12 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-class ImageRepositoryImpl(val context: Context) : ImageRepository{
+class ImageRepositoryImpl(private val context: Context) : ImageRepository{
     companion object{
         private const val IMAGE_NAME = "image.png"
     }
 
-    val imageFile = File(context.filesDir, IMAGE_NAME)
+    private val imageFile = File(context.filesDir, IMAGE_NAME)
 
     override fun save(image: Bitmap): Boolean {
         FileOutputStream(imageFile).use { out ->
