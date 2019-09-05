@@ -1,4 +1,4 @@
-package com.maximot.floodfill.floodfill.utils
+package com.maximot.floodfill.utils
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -120,37 +120,35 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
             canvas.drawLine(
                 startX.toFloat(),
                 y.toFloat(),
-                endX.toFloat(),
+                endX.toFloat()+1,
                 y.toFloat(),
                 paint
             )
         }
 
-        fun getLeftX(x: Int,y: Int): Int{
+        private fun getLeftX(x: Int,y: Int): Int{
             var leftX = x
             while(leftX >= 0 && image[leftX,y] == startColor) {
                 leftX--
             }
-            leftX++
-            return leftX
+            return leftX+1
         }
 
-        fun getRightX(x: Int,y: Int): Int{
+        private fun getRightX(x: Int,y: Int): Int{
             var rightX = x
             while(rightX < image.width && image[rightX,y] == startColor) {
                 rightX++
             }
-            rightX--
-            return rightX
+            return rightX-1
         }
 
-        fun addSeeds(start: Int, end: Int, y: Int){
+        private fun addSeeds(start: Int, end: Int, y: Int){
 
             if(y < 0 || y >= image.height)
                 return
 
             var isNextValidPointIsSeed = true
-            for (i in start until end) {
+            for (i in start..end) {
                 if (image[i, y] == startColor) {
                     if (isNextValidPointIsSeed) {
                         isNextValidPointIsSeed = false
