@@ -54,11 +54,13 @@ class FloodFillingThread(
             FloodfillAlgorithm.SCANLINE -> Floodfiller.Scanline(image, point, color)
         }
 
-        while (!floodfiller.isDone && isRunning) {
+        while (isRunning) {
             var beforeTime = System.currentTimeMillis()
             synchronized(image) {
                 floodfiller.step()
             }
+            if(floodfiller.isDone)
+                isRunning = false
             var afterTime = System.currentTimeMillis()
             val elapsedTime = afterTime - beforeTime
             sleep(max(0, frameTime - elapsedTime))

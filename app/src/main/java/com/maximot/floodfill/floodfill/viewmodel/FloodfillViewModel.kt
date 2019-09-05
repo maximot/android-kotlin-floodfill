@@ -77,6 +77,7 @@ class FloodfillViewModel(
     }
 
     private fun onNewPoint(x: Int, y: Int) {
+        deleteDeadThreads()
         val floodFillingThread =
             imageProcessingService.floodfillImagePart(
                 image.value ?: return,
@@ -91,6 +92,12 @@ class FloodfillViewModel(
         }
         floodFillingThread.fps = fps.value!!
         floodFillingThread.startFilling()
+    }
+
+    private fun deleteDeadThreads() {
+        processingThreads.removeAll {
+            !it.isAlive
+        }
     }
 
     private fun generateImage(width: Int, height: Int): Bitmap {
@@ -110,6 +117,7 @@ class FloodfillViewModel(
         processingThreads.forEach {
             it.stopFilling()
         }
+        processingThreads.clear()
     }
 
     private fun saveImage() {
