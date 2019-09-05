@@ -1,6 +1,7 @@
 package com.maximot.floodfill
 
 import android.os.Bundle
+import com.maximot.floodfill.base.BaseActivity
 import com.maximot.floodfill.floodfill.ui.fragment.FloodfillFragment
 
 class MainActivity : BaseActivity() {

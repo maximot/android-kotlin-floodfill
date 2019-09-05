@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.maximot.floodfill.assemble.DependencyProvider
+import com.maximot.floodfill.base.BaseActivity
+import com.maximot.floodfill.base.BaseFragment
 
 
 class FloodfillApplication : Application() {

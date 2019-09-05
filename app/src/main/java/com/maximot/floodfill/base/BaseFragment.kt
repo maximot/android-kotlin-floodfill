@@ -1,4 +1,4 @@
-package com.maximot.floodfill
+package com.maximot.floodfill.base
 
 import androidx.fragment.app.Fragment
 import com.maximot.floodfill.assemble.DependencyProvider
