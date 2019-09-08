@@ -11,6 +11,7 @@ import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.maximot.floodfill.R
+import com.maximot.floodfill.assemble.FloodfillViewModelFactory
 import com.maximot.floodfill.base.BaseFragment
 import com.maximot.floodfill.floodfill.ui.view.BitmapView
 import com.maximot.floodfill.floodfill.viewmodel.FloodfillViewModel
@@ -26,6 +27,7 @@ class FloodfillFragment : BaseFragment() {
         fun create() = FloodfillFragment()
     }
 
+    lateinit var floodfillViewModelFactory: FloodfillViewModelFactory
     private lateinit var viewModel: FloodfillViewModel
 
     override fun onCreateView(
@@ -92,7 +94,7 @@ class FloodfillFragment : BaseFragment() {
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, dependencyProvider.floodfillViewModelFactory)
+        viewModel = ViewModelProviders.of(this, floodfillViewModelFactory)
             .get(FloodfillViewModel::class.java)
         viewModel.fps.observe(this, Observer { fps ->
             floodfill_fps?.text = "$fps FPS"

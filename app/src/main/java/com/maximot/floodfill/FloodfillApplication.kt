@@ -3,26 +3,38 @@ package com.maximot.floodfill
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.maximot.floodfill.assemble.DependencyProvider
-import com.maximot.floodfill.base.BaseActivity
-import com.maximot.floodfill.base.BaseFragment
+import com.maximot.floodfill.assemble.Injector
 
 
 class FloodfillApplication : Application() {
 
-    val dependencyProvider: DependencyProvider by lazy {
-        DependencyProvider(this)
-    }
+    lateinit var injector: Injector
 
     override fun onCreate() {
         super.onCreate()
+        setupDependencyInjection()
+    }
+
+    private fun setupDependencyInjection() {
+        Injector.inject(this)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(p0: Activity, p1: Bundle?) {
-                if (p0 is BaseActivity) {
-                    p0.dependencyProvider = dependencyProvider
-                    handleFragments(p0)
+                injector.handleActivity(p0)
+                if(p0 is AppCompatActivity){
+                    p0.supportFragmentManager.registerFragmentLifecycleCallbacks(object:
+                        FragmentManager.FragmentLifecycleCallbacks() {
+                        override fun onFragmentPreCreated(
+                            fm: FragmentManager,
+                            f: Fragment,
+                            savedInstanceState: Bundle?
+                        ) {
+                            super.onFragmentPreCreated(fm, f, savedInstanceState)
+                            injector.handleFragment(f)
+                        }
+                    }, true)
                 }
             }
 
@@ -38,21 +50,5 @@ class FloodfillApplication : Application() {
 
             override fun onActivityResumed(p0: Activity) = Unit
         })
-    }
-
-    private fun handleFragments(p0: BaseActivity) {
-        p0.supportFragmentManager.registerFragmentLifecycleCallbacks(object:
-            FragmentManager.FragmentLifecycleCallbacks() {
-            override fun onFragmentPreCreated(
-                fm: FragmentManager,
-                f: Fragment,
-                savedInstanceState: Bundle?
-            ) {
-                super.onFragmentPreCreated(fm, f, savedInstanceState)
-                if(f is BaseFragment){
-                    f.dependencyProvider = dependencyProvider
-                }
-            }
-        },true)
     }
 }
