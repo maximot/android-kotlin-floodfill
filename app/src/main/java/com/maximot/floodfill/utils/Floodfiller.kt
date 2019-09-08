@@ -4,39 +4,71 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
+import android.os.Parcel
 import androidx.core.graphics.get
 import androidx.core.graphics.set
 import java.util.*
 
-sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: Int) {
+sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: Int){
 
     companion object {
         fun create(image: Bitmap, startPoint: Point, color: Int, algorithm: FloodfillAlgorithm) =
             when (algorithm) {
-                FloodfillAlgorithm.QUEUE -> Queue(image,startPoint,color)
-                FloodfillAlgorithm.STACK -> Stack(image,startPoint,color)
-                FloodfillAlgorithm.SCANLINE -> Scanline(image,startPoint,color)
+                FloodfillAlgorithm.QUEUE -> Queue(image, startPoint, color)
+                FloodfillAlgorithm.STACK -> Stack(image, startPoint, color)
+                FloodfillAlgorithm.SCANLINE -> Scanline(image, startPoint, color)
             }
+
+        fun create(image: Bitmap, parcel: Parcel): Floodfiller {
+            val algorithm = parcel.readEnum<FloodfillAlgorithm>()!!
+            val startPoint = parcel.readParcelable<Point>(Point::class.java.classLoader)!!
+            val color = parcel.readInt()
+            val startColor = parcel.readInt()
+            val currentPoint = parcel.readParcelable<Point>(Point::class.java.classLoader)!!
+            val points = parcel.createTypedArray(Point.CREATOR)!!
+
+            return create(image, startPoint, color, algorithm).apply {
+                this.startColor = startColor
+                this.currentPoint = currentPoint
+                this.points.addAll(points)
+            }
+        }
 
     }
 
     internal var currentPoint = startPoint
     internal var startColor = image[startPoint.x, startPoint.y]
 
-    abstract val isDone: Boolean
+    internal val points: ArrayDeque<Point> = ArrayDeque()
+
+    val isDone
+        get() = points.isEmpty()
+
     abstract fun step()
+
     fun fill() {
         while (!isDone)
             step()
     }
 
+    private val algorithm: FloodfillAlgorithm
+        get() = when (this) {
+            is Scanline -> FloodfillAlgorithm.SCANLINE
+            is Stack -> FloodfillAlgorithm.STACK
+            is Queue -> FloodfillAlgorithm.QUEUE
+        }
+
+    fun writeToParcel(parcel: Parcel) {
+        parcel.writeEnum(algorithm)
+        parcel.writeParcelable(startPoint, 0)
+        parcel.writeInt(color)
+        parcel.writeInt(startColor)
+        parcel.writeParcelable(currentPoint, 0)
+        parcel.writeTypedArray(points.toTypedArray(), 0)
+    }
+
     class Stack(image: Bitmap, startPoint: Point, color: Int) :
         Floodfiller(image, startPoint, color) {
-
-        private val points: ArrayDeque<Point> = ArrayDeque()
-
-        override val isDone
-            get() = points.isEmpty()
 
         init {
             points.push(startPoint)
@@ -66,11 +98,6 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
 
     class Queue(image: Bitmap, startPoint: Point, color: Int) :
         Floodfiller(image, startPoint, color) {
-
-        private val points: ArrayDeque<Point> = ArrayDeque()
-
-        override val isDone
-            get() = points.isEmpty()
 
         init {
             points.offer(startPoint)
@@ -111,21 +138,16 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
             setColor(color)
         }
 
-        override val isDone
-            get() = seeds.isEmpty()
-
-        private val seeds: ArrayDeque<Point> = ArrayDeque()
-
         init {
             if (image[startPoint.x, startPoint.y] != color)
-                seeds.push(startPoint)
+                points.push(startPoint)
         }
 
         override fun step() {
-            if (seeds.isEmpty())
+            if (points.isEmpty())
                 return
 
-            currentPoint = seeds.pop()
+            currentPoint = points.pop()
             val x = currentPoint.x
             val y = currentPoint.y
 
@@ -170,7 +192,7 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
                 if (image[i, y] == startColor) {
                     if (isNextValidPointIsSeed) {
                         isNextValidPointIsSeed = false
-                        seeds.push(Point(i, y))
+                        points.push(Point(i, y))
                     }
                 } else {
                     isNextValidPointIsSeed = true

@@ -71,6 +71,10 @@ class FloodFillingExecutor() {
         floodfillerList.clear()
     }
 
+    fun getFillers() = synchronized(floodfillerList){
+        floodfillerList.toList()
+    }
+
     private inner class FloodfillingThread: Thread(){
         override fun run() {
             while(isRunning) {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.maximot.floodfill.floodfill.data.FloodFillingExecutor
+import com.maximot.floodfill.floodfill.data.FloodfillerRepository
 import com.maximot.floodfill.floodfill.data.ImageProcessingService
 import com.maximot.floodfill.floodfill.data.ImageRepository
 import com.maximot.floodfill.utils.FloodfillAlgorithm
@@ -13,7 +14,8 @@ import kotlin.math.max
 
 class FloodfillViewModel(
     private val imageRepository: ImageRepository,
-    private val imageProcessingService: ImageProcessingService
+    private val imageProcessingService: ImageProcessingService,
+    private val floodFillerRepository: FloodfillerRepository
 ) : ViewModel() {
 
     companion object {
@@ -36,6 +38,15 @@ class FloodfillViewModel(
         isBusy.value = true
         try {
             image.value = imageRepository.load()
+            try {
+                val fillers = floodFillerRepository.getFloodfillersFor(image.value!!)
+                fillers.forEach {
+                    floodfillingExecutor.addFiller(it)
+                }
+            } catch (e: IOException){
+                // NO-OP
+            }
+
         } catch (e: IOException) {
             System.err.println(e)
             onGenerateImage(128, 128)
@@ -71,6 +82,7 @@ class FloodfillViewModel(
         try {
             image.value?.recycle()
         } catch (e: Exception) {
+            // NO-OP
         }
         super.onCleared()
     }
@@ -110,5 +122,10 @@ class FloodfillViewModel(
     fun onStop() {
         floodfillingExecutor.stop()
         saveImage()
+        saveFillers()
+    }
+
+    private fun saveFillers() {
+        floodFillerRepository.saveFloodfillers(floodfillingExecutor.getFillers())
     }
 }

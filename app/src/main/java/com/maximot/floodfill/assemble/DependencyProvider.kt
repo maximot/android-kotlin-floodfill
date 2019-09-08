@@ -1,9 +1,7 @@
 package com.maximot.floodfill.assemble
 
 import android.content.Context
-import com.maximot.floodfill.floodfill.data.ImageProcessingServiceImpl
-import com.maximot.floodfill.floodfill.data.ImageRepository
-import com.maximot.floodfill.floodfill.data.ImageRepositoryImpl
+import com.maximot.floodfill.floodfill.data.*
 
 class DependencyProvider(val context: Context) {
     val imageRepository: ImageRepository
@@ -11,16 +9,22 @@ class DependencyProvider(val context: Context) {
                 ImageRepositoryImpl(context = context)
             }
 
-    val imageProcessingService: ImageProcessingServiceImpl
+    val imageProcessingService: ImageProcessingService
             by lazy {
                 ImageProcessingServiceImpl()
+            }
+
+    val floodFillerRepository: FloodfillerRepository
+            by lazy {
+                FloodfillerRepositoryImpl(context = context)
             }
 
     val floodfillViewModelFactory: FloodfillViewModelFactory
             by lazy {
                 FloodfillViewModelFactory(
                     imageRepository,
-                    imageProcessingService
+                    imageProcessingService,
+                    floodFillerRepository
                 )
             }
 }
