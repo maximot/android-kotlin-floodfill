@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.maximot.floodfill.floodfill.data.FloodfillerRepository
 import com.maximot.floodfill.floodfill.data.ImageProcessingService
 import com.maximot.floodfill.floodfill.data.ImageRepository
+import com.maximot.floodfill.floodfill.data.UserSettingsRepository
 import com.maximot.floodfill.floodfill.viewmodel.FloodfillViewModel
 
 
@@ -12,7 +13,8 @@ import com.maximot.floodfill.floodfill.viewmodel.FloodfillViewModel
 class FloodfillViewModelFactory(
     private val imageRepository: ImageRepository,
     private val imageProcessingService: ImageProcessingService,
-    private val floodFillerRepository: FloodfillerRepository
+    private val floodFillerRepository: FloodfillerRepository,
+    private val userSettingsRepository: UserSettingsRepository
 ) :
     ViewModelProvider.Factory {
 
@@ -21,7 +23,8 @@ class FloodfillViewModelFactory(
             return FloodfillViewModel(
                 imageRepository,
                 imageProcessingService,
-                floodFillerRepository
+                floodFillerRepository,
+                userSettingsRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

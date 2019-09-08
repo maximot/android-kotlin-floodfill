@@ -19,12 +19,18 @@ class DependencyProvider(val context: Context) {
                 FloodfillerRepositoryImpl(context = context)
             }
 
+    val userSettingsRepository: UserSettingsRepository
+            by lazy {
+                UserSettingsRepositoryImpl(context = context)
+            }
+
     val floodfillViewModelFactory: FloodfillViewModelFactory
             by lazy {
                 FloodfillViewModelFactory(
                     imageRepository,
                     imageProcessingService,
-                    floodFillerRepository
+                    floodFillerRepository,
+                    userSettingsRepository
                 )
             }
 }

@@ -3,10 +3,7 @@ package com.maximot.floodfill.floodfill.viewmodel
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.maximot.floodfill.floodfill.data.FloodFillingExecutor
-import com.maximot.floodfill.floodfill.data.FloodfillerRepository
-import com.maximot.floodfill.floodfill.data.ImageProcessingService
-import com.maximot.floodfill.floodfill.data.ImageRepository
+import com.maximot.floodfill.floodfill.data.*
 import com.maximot.floodfill.utils.FloodfillAlgorithm
 import java.io.IOException
 import kotlin.math.max
@@ -15,7 +12,8 @@ import kotlin.math.max
 class FloodfillViewModel(
     private val imageRepository: ImageRepository,
     private val imageProcessingService: ImageProcessingService,
-    private val floodFillerRepository: FloodfillerRepository
+    private val floodFillerRepository: FloodfillerRepository,
+    private val userSettingsRepository: UserSettingsRepository
 ) : ViewModel() {
 
     companion object {
@@ -51,9 +49,10 @@ class FloodfillViewModel(
             System.err.println(e)
             onGenerateImage(128, 128)
         }
+        val userSettings = userSettingsRepository.loadUserSettings()
         isBusy.value = false
-        fps.value = 30
-        algorithm.value = FloodfillAlgorithm.QUEUE
+        fps.value = userSettings.fps
+        algorithm.value = userSettings.algorithm
     }
 
     fun onBitmapClicked(x: Int, y: Int) {
@@ -123,6 +122,14 @@ class FloodfillViewModel(
         floodfillingExecutor.stop()
         saveImage()
         saveFillers()
+        saveSettings()
+    }
+
+    private fun saveSettings() {
+        userSettingsRepository.saveUserSettings(UserSettings(
+            fps.value!!,
+            algorithm.value!!
+        ))
     }
 
     private fun saveFillers() {

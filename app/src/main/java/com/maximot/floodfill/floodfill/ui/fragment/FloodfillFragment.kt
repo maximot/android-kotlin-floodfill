@@ -67,9 +67,7 @@ class FloodfillFragment : BaseFragment() {
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
 
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-                p0?.progress = (((viewModel.fps.value?:0) / 60.0f) * 1000).roundToInt()
-            }
+            override fun onStopTrackingTouch(p0: SeekBar?) = Unit
         })
     }
 
@@ -92,12 +90,18 @@ class FloodfillFragment : BaseFragment() {
     }
 
     @SuppressLint("SetTextI18n")
+    private fun setFps(fps: Int){
+        floodfill_fps?.text = "$fps FPS"
+        floodfill_algorithm_speed_chooser?.progress =
+            (((viewModel.fps.value?:0) / 60.0f) * 1000).roundToInt()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, floodfillViewModelFactory)
             .get(FloodfillViewModel::class.java)
         viewModel.fps.observe(this, Observer { fps ->
-            floodfill_fps?.text = "$fps FPS"
+            setFps(fps)
         })
         viewModel.algorithm.observe(this, Observer { algorithm ->
             floodfill_algorithm_chooser.setSelection(algorithm.ordinal)
