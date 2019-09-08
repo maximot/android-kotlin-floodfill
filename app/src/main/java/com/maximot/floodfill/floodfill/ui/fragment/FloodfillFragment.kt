@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.maximot.floodfill.base.BaseFragment
 import com.maximot.floodfill.R
+import com.maximot.floodfill.base.BaseFragment
 import com.maximot.floodfill.floodfill.ui.view.BitmapView
 import com.maximot.floodfill.floodfill.viewmodel.FloodfillViewModel
 import com.maximot.floodfill.utils.FloodfillAlgorithm
@@ -111,6 +111,11 @@ class FloodfillFragment : BaseFragment() {
             else
                 unblockUi()
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
     }
 
     override fun onStop() {

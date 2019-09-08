@@ -3,9 +3,9 @@ package com.maximot.floodfill.floodfill.viewmodel
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.maximot.floodfill.floodfill.data.FloodFillingExecutor
 import com.maximot.floodfill.floodfill.data.ImageProcessingService
 import com.maximot.floodfill.floodfill.data.ImageRepository
-import com.maximot.floodfill.utils.FloodFillingThread
 import com.maximot.floodfill.utils.FloodfillAlgorithm
 import java.io.IOException
 import kotlin.math.max
@@ -30,7 +30,7 @@ class FloodfillViewModel(
     val algorithm = MutableLiveData<FloodfillAlgorithm>()
     val isBusy = MutableLiveData<Boolean>()
 
-    private var processingThreads: ArrayList<FloodFillingThread> = arrayListOf()
+    private val floodfillingExecutor = FloodFillingExecutor()
 
     init {
         isBusy.value = true
@@ -60,14 +60,13 @@ class FloodfillViewModel(
 
     fun onGenerateImage(width: Int, height: Int) {
         isBusy.value = true
-        stopAllThreads()
+        floodfillingExecutor.clear()
         image.value = generateImage(max(width, 32), max(height, 32))
         saveImage()
         isBusy.value = false
     }
 
     override fun onCleared() {
-        stopAllThreads()
         saveImage()
         try {
             image.value?.recycle()
@@ -77,8 +76,7 @@ class FloodfillViewModel(
     }
 
     private fun onNewPoint(x: Int, y: Int) {
-        deleteDeadThreads()
-        val floodFillingThread =
+        val floodFiller =
             imageProcessingService.floodfillImagePart(
                 image.value ?: return,
                 x,
@@ -86,18 +84,8 @@ class FloodfillViewModel(
                 FILLING_COLOR,
                 algorithm.value ?: return
             )
-        processingThreads.add(floodFillingThread)
-        if (fps.value == null) {
-            fps.value = 30
-        }
-        floodFillingThread.fps = fps.value!!
-        floodFillingThread.startFilling()
-    }
-
-    private fun deleteDeadThreads() {
-        processingThreads.removeAll {
-            !it.isAlive
-        }
+        updateFps()
+        floodfillingExecutor.addFiller(floodFiller)
     }
 
     private fun generateImage(width: Int, height: Int): Bitmap {
@@ -108,23 +96,19 @@ class FloodfillViewModel(
         if (fps.value == null) {
             fps.value = 30
         }
-        processingThreads.forEach {
-            it.fps = fps.value!!
-        }
-    }
-
-    private fun stopAllThreads() {
-        processingThreads.forEach {
-            it.stopFilling()
-        }
-        processingThreads.clear()
+        floodfillingExecutor.fps = fps.value!!
     }
 
     private fun saveImage() {
         imageRepository.save(image.value ?: return)
     }
 
+    fun onStart() {
+        floodfillingExecutor.start()
+    }
+
     fun onStop() {
+        floodfillingExecutor.stop()
         saveImage()
     }
 }

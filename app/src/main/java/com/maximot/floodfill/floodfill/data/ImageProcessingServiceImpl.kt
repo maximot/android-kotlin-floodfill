@@ -3,8 +3,8 @@ package com.maximot.floodfill.floodfill.data
 import android.graphics.Bitmap
 import android.graphics.Point
 import com.maximot.floodfill.utils.BitmapGenerator
-import com.maximot.floodfill.utils.FloodFillingThread
 import com.maximot.floodfill.utils.FloodfillAlgorithm
+import com.maximot.floodfill.utils.Floodfiller
 import java.lang.Math.random
 import kotlin.math.cos
 
@@ -21,7 +21,7 @@ class ImageProcessingServiceImpl : ImageProcessingService {
         x: Int, y: Int,
         color: Int,
         algorithm: FloodfillAlgorithm
-    ): FloodFillingThread {
-        return FloodFillingThread(image, Point(x, y), color, algorithm)
+    ): Floodfiller {
+        return Floodfiller.create(image, Point(x,y), color, algorithm)
     }
 }
