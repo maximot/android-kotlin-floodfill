@@ -45,6 +45,17 @@ class FloodfillFragment : BaseFragment() {
         setupAlgorithmChooser()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
+    }
+
+
     private fun setupAlgorithmChooser() {
         floodfill_algorithm_chooser.adapter =
             ArrayAdapter.createFromResource(context!!, R.array.algorithms, R.layout.spinner_item)
@@ -62,7 +73,7 @@ class FloodfillFragment : BaseFragment() {
         floodfill_algorithm_speed_chooser.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                viewModel.onNewFps(min(60,max(1,(p1/1000.0f * 60).roundToInt())))
+                viewModel.onNewFps(min(60, max(1, (p1 / 1000.0f * 60).roundToInt())))
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -90,10 +101,10 @@ class FloodfillFragment : BaseFragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setFps(fps: Int){
+    private fun setFps(fps: Int) {
         floodfill_fps?.text = "$fps FPS"
         floodfill_algorithm_speed_chooser?.progress =
-            (((viewModel.fps.value?:0) / 60.0f) * 1000).roundToInt()
+            (((viewModel.fps.value ?: 0) / 60.0f) * 1000).roundToInt()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,27 +117,17 @@ class FloodfillFragment : BaseFragment() {
         viewModel.algorithm.observe(this, Observer { algorithm ->
             floodfill_algorithm_chooser.setSelection(algorithm.ordinal)
         })
-        viewModel.image.observe(this,Observer { image ->
+        viewModel.image.observe(this, Observer { image ->
             floodfill_bitmap_view.image = image
             floodfill_bitmap_width.setText(image.width.toString())
             floodfill_bitmap_height.setText(image.height.toString())
         })
         viewModel.isBusy.observe(this, Observer { busy ->
-            if(busy)
+            if (busy)
                 blockUi()
             else
                 unblockUi()
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.onStop()
     }
 
     private fun unblockUi() {

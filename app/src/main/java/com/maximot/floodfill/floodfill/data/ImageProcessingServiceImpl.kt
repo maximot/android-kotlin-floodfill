@@ -22,6 +22,6 @@ class ImageProcessingServiceImpl : ImageProcessingService {
         color: Int,
         algorithm: FloodfillAlgorithm
     ): Floodfiller {
-        return Floodfiller.create(image, Point(x,y), color, algorithm)
+        return Floodfiller.create(image, Point(x, y), color, algorithm)
     }
 }

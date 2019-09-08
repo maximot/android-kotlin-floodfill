@@ -41,7 +41,7 @@ class FloodfillViewModel(
                 fillers.forEach {
                     floodfillingExecutor.addFiller(it)
                 }
-            } catch (e: IOException){
+            } catch (e: IOException) {
                 // NO-OP
             }
 
@@ -86,6 +86,17 @@ class FloodfillViewModel(
         super.onCleared()
     }
 
+    fun onStart() {
+        floodfillingExecutor.start()
+    }
+
+    fun onStop() {
+        floodfillingExecutor.stop()
+        saveImage()
+        saveFillers()
+        saveSettings()
+    }
+
     private fun onNewPoint(x: Int, y: Int) {
         val floodFiller =
             imageProcessingService.floodfillImagePart(
@@ -110,26 +121,17 @@ class FloodfillViewModel(
         floodfillingExecutor.fps = fps.value!!
     }
 
+    private fun saveSettings() {
+        userSettingsRepository.saveUserSettings(
+            UserSettings(
+                fps.value!!,
+                algorithm.value!!
+            )
+        )
+    }
+
     private fun saveImage() {
         imageRepository.save(image.value ?: return)
-    }
-
-    fun onStart() {
-        floodfillingExecutor.start()
-    }
-
-    fun onStop() {
-        floodfillingExecutor.stop()
-        saveImage()
-        saveFillers()
-        saveSettings()
-    }
-
-    private fun saveSettings() {
-        userSettingsRepository.saveUserSettings(UserSettings(
-            fps.value!!,
-            algorithm.value!!
-        ))
     }
 
     private fun saveFillers() {

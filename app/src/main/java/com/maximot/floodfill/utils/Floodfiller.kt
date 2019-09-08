@@ -9,7 +9,7 @@ import androidx.core.graphics.get
 import androidx.core.graphics.set
 import java.util.*
 
-sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: Int){
+sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: Int) {
 
     companion object {
         fun create(image: Bitmap, startPoint: Point, color: Int, algorithm: FloodfillAlgorithm) =
@@ -151,8 +151,8 @@ sealed class Floodfiller(val image: Bitmap, val startPoint: Point, val color: In
             val x = currentPoint.x
             val y = currentPoint.y
 
-            var startX = getLeftX(x, y)
-            var endX = getRightX(x, y)
+            val startX = getLeftX(x, y)
+            val endX = getRightX(x, y)
 
             addSeeds(startX, endX, y + 1)
             addSeeds(startX, endX, y - 1)

@@ -9,6 +9,10 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        setupFloodfillFragment(savedInstanceState)
+    }
+
+    private fun setupFloodfillFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, FloodfillFragment.create())

@@ -5,18 +5,18 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.maximot.floodfill.utils.FloodfillAlgorithm
 
-class UserSettingsRepositoryImpl(private val context: Context) : UserSettingsRepository{
+class UserSettingsRepositoryImpl(context: Context) : UserSettingsRepository {
 
-    companion object{
+    companion object {
         private const val PREFS_NAME = "USER_SETTINGS"
         private const val PREFS_FPS_ARG = "FPS_ARG"
         private const val PREFS_ALGORITHM_ARG = "ALGORITHM_ARG"
     }
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override fun saveUserSettings(us: UserSettings){
+    override fun saveUserSettings(us: UserSettings) {
         sharedPreferences.edit {
             putString(PREFS_ALGORITHM_ARG, us.algorithm.name)
             putInt(PREFS_FPS_ARG, us.fps)

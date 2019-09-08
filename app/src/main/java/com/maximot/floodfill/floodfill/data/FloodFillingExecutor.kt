@@ -30,9 +30,9 @@ class FloodFillingExecutor() {
     private var fillingThread: FloodfillingThread? = null
 
     fun start() {
-        if(isRunning)
+        if (isRunning)
             return
-        if(fillingThread != null)
+        if (fillingThread != null)
             throw IllegalStateException("Something went wrong!")
         isRunning = true
         fillingThread = FloodfillingThread()
@@ -40,7 +40,7 @@ class FloodFillingExecutor() {
     }
 
     fun stop() {
-        if(!isRunning)
+        if (!isRunning)
             return
         var retry = true
         isRunning = false
@@ -55,40 +55,40 @@ class FloodFillingExecutor() {
         }
     }
 
-    fun isEmpty() = synchronized(floodfillerList){
+    fun isEmpty() = synchronized(floodfillerList) {
         floodfillerList.isEmpty()
     }
 
-    fun addFiller(floodfiller: Floodfiller) = synchronized(floodfillerList){
+    fun addFiller(floodfiller: Floodfiller) = synchronized(floodfillerList) {
         floodfillerList.add(floodfiller)
     }
 
-    fun removeFiller(floodfiller: Floodfiller) = synchronized(floodfillerList){
+    fun removeFiller(floodfiller: Floodfiller) = synchronized(floodfillerList) {
         floodfillerList.remove(floodfiller)
     }
 
-    fun clear() = synchronized(floodfillerList){
+    fun clear() = synchronized(floodfillerList) {
         floodfillerList.clear()
     }
 
-    fun getFillers() = synchronized(floodfillerList){
+    fun getFillers() = synchronized(floodfillerList) {
         floodfillerList.toList()
     }
 
-    private inner class FloodfillingThread: Thread(){
+    private inner class FloodfillingThread : Thread() {
         override fun run() {
-            while(isRunning) {
-                var beforeTime = System.currentTimeMillis()
+            while (isRunning) {
+                val beforeTime = System.currentTimeMillis()
                 synchronized(floodfillerList) {
                     val activeFillers = floodfillerList.filter { !it.isDone }
                     activeFillers.forEach {
-                        synchronized(it.image){
+                        synchronized(it.image) {
                             it.step()
                         }
                     }
                     floodfillerList.removeAll { it.isDone }
                 }
-                var afterTime = System.currentTimeMillis()
+                val afterTime = System.currentTimeMillis()
                 val elapsedTime = afterTime - beforeTime
                 sleep(max(0, frameTime - elapsedTime))
             }

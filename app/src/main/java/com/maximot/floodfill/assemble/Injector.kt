@@ -8,29 +8,31 @@ import com.maximot.floodfill.base.BaseActivity
 import com.maximot.floodfill.base.BaseFragment
 import com.maximot.floodfill.floodfill.ui.fragment.FloodfillFragment
 
-class Injector(private val context: Context){
+class Injector(private val context: Context) {
 
-    val dependencyProvider by lazy {
-         DependencyProvider(context)
-    }
-
-    companion object{
-        fun inject(app: FloodfillApplication){
+    companion object {
+        fun inject(app: FloodfillApplication) {
             app.injector = Injector(app)
         }
     }
 
-    fun handleActivity(activity: Activity){
-        if(activity is BaseActivity){
+    val dependencyProvider by lazy {
+        DependencyProvider(context)
+    }
+
+    fun handleActivity(activity: Activity) {
+        if (activity is BaseActivity) {
             inject(activity)
         }
     }
 
-    fun handleFragment(fragment: Fragment){
-        if(fragment is BaseFragment){
+    fun handleFragment(fragment: Fragment) {
+        if (fragment is BaseFragment) {
             inject(fragment)
-            when(fragment){
-                is FloodfillFragment -> { inject(fragment) }
+            when (fragment) {
+                is FloodfillFragment -> {
+                    inject(fragment)
+                }
             }
         }
     }

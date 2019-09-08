@@ -55,25 +55,25 @@ class BitmapView @JvmOverloads constructor(
         return true
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
+    override fun surfaceCreated(holder: SurfaceHolder) {
         isSurfaceCreated = true
-        onSurfaceCreated(holder)
+        onSurfaceCreated()
     }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
         isSurfaceCreated = false
-        onSurfaceDestroyed(holder)
+        onSurfaceDestroyed()
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) = Unit
 
-    private fun onSurfaceCreated(holder: SurfaceHolder?) {
+    private fun onSurfaceCreated() {
         if (image != null) {
             startBitmapRendering()
         }
     }
 
-    private fun onSurfaceDestroyed(holder: SurfaceHolder?) {
+    private fun onSurfaceDestroyed() {
         stopBitmapRendering()
     }
 
@@ -100,7 +100,10 @@ class BitmapView @JvmOverloads constructor(
         bitmapDrawThread = null
     }
 
-    class BitmapDrawThread(private val surfaceHolder: SurfaceHolder, private val image: Bitmap) :
+    private class BitmapDrawThread(
+        private val surfaceHolder: SurfaceHolder,
+        private val image: Bitmap
+    ) :
         Thread() {
         private var time = System.currentTimeMillis()
 

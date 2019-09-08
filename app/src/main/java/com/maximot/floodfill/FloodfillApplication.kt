@@ -23,8 +23,8 @@ class FloodfillApplication : Application() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(p0: Activity, p1: Bundle?) {
                 injector.handleActivity(p0)
-                if(p0 is AppCompatActivity){
-                    p0.supportFragmentManager.registerFragmentLifecycleCallbacks(object:
+                if (p0 is AppCompatActivity) {
+                    p0.supportFragmentManager.registerFragmentLifecycleCallbacks(object :
                         FragmentManager.FragmentLifecycleCallbacks() {
                         override fun onFragmentPreCreated(
                             fm: FragmentManager,
