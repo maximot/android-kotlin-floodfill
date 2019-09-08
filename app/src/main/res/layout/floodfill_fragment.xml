@@ -43,7 +43,6 @@
         android:ems="3"
         android:inputType="number"
         android:maxLength="3"
-        android:text="128"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/floodfill_speed"
         app:layout_constraintEnd_toStartOf="@+id/floodfill_bitmap_size_divider"
@@ -70,7 +69,6 @@
         android:ems="3"
         android:inputType="number"
         android:maxLength="3"
-        android:text="128"
         android:textAlignment="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_bitmap_width"
         app:layout_constraintEnd_toStartOf="@+id/floodfill_bitmap_generate_button"
@@ -105,10 +103,10 @@
 
     <TextView
         android:id="@+id/floodfill_speed"
+        style="@style/AppTheme.Text.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        style="@style/AppTheme.Text.Primary"
         android:text="@string/speed"
         app:layout_constraintBaseline_toBaselineOf="@+id/floodfill_fps"
         app:layout_constraintEnd_toStartOf="@+id/floodfill_algorithm_speed_chooser"
@@ -117,15 +115,15 @@
 
     <TextView
         android:id="@+id/floodfill_fps"
+        style="@style/AppTheme.Text.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        style="@style/AppTheme.Text.Primary"
-        tools:text="30 fps"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/floodfill_algorithm_speed_chooser" />
+        app:layout_constraintStart_toEndOf="@+id/floodfill_algorithm_speed_chooser"
+        tools:text="30 fps" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
